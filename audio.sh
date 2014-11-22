@@ -63,7 +63,7 @@ while [ true ];do
   checkstatus
   counter=$(( $counter+1 ))
   # Empty log file every 2 hours. mpd just let's it grow.
-  if [ counter -eq 3600 ];then
+  if [ $counter -eq 3600 ];then
     counter=0
     cp /var/log/mpd/mpd.log /var/log/mpd/mpd.log.old
     echo "" > /var/log/mpd/mpd.log
