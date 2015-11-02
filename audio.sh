@@ -20,19 +20,23 @@ keysource="satsource"
 
 poweraudio() {
 echo "Starting with power on"
-irsend send_once $lircdevice $keypower
+irsend send_start $lircdevice $keypower
+sleep 0.4
+irsend send_stop $lircdevice $keypower
 }
 
 loopsource() {
 echo "Ok Now we will need a loop to walk through the inputs."
 # TODO: lower the number of times when it is more reliable.
 # We have 5 inputs.
+times=$1
 j=0
-times=$?
+
+echo $times
 while [ "`hcitool name $btdevice`" = "" -a $j -lt $times ] ;do
-  irsend send_once $lircdevice $keysource
+  irsend send_once $lircdevice $keysource $keysource
   echo "wait a moment $j"
-  sleep 1
+  sleep 2
   j=$(( $j+1 ))
   # TODO: see if this can be speed up a bit.
 done
@@ -43,7 +47,7 @@ poweraudio
 echo "Soundbar should be starting up now"
 echo "We will sleep for a bit to give it some time"
 sleep 2
-loopsource 10
+loopsource 5
 }
 
 checkstatus() {
@@ -75,7 +79,7 @@ while [ true ];do
     counter1=0
   fi
   # Disconnect bluetooth after 5 minutes of no playback
-  if [ counter1 -eq 150 ]; then
+  if [ $counter1 -eq 150 ]; then
     counter1=0
     if [ "`hcitool con|grep -o \"$btdevice\"`" = "$btdevice" ]; then
       bt-audio -d $btdevice
