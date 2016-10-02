@@ -10,14 +10,14 @@
 # define var change to your needs.
 btdevice="C4:73:1E:0E:8B:CC"
 host="0204@localhost"
-port="6600"
+port="6602"
 counter=0
 counter1=0
 timeoutcounter=200
 lircdevice="Audio"
 keypower="KEY_POWER"
 keysource="satsource"
-
+link=-1
 poweraudio() {
 echo "Starting with power on"
 irsend send_start $lircdevice $keypower
@@ -50,7 +50,17 @@ sleep 2
 loopsource 5
 }
 
+link_available()
+{
+if curl --output /dev/null --silent --head --fail "$1"; then
+    link=1
+else
+    link=0
+fi
+}
+
 checkstatus() {
+
   if [ "`mpc --host=$host -p $port|grep playing`" = "" ];then
     #playback paused or stopped we will disable output 1 (bluetooth).
     mpc --host=$host -p $port disable 1
@@ -72,6 +82,13 @@ checkstatus() {
 
 while [ true ];do
   echo "check playback status every 2 seconds"
+  link_available http://10.0.0.16:8000
+  if [  "$link" = "1" -a "`mpc |grep playing`" = "" ]; then 
+  mpc --host=$host -p $port play
+  else
+  mpc --host=$host -p $port stop
+  fi
+
   checkstatus
   if [ "`mpc --host=$host -p $port outputs|grep 'Output 1'|grep -o '[^ ]*$'`" = "disabled" ]; then
     counter1=$(( $counter1+1 ))
