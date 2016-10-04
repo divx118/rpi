@@ -44,7 +44,8 @@ counter=$(($counter+1))
 echo $counter
 done
 hour="`date +'%H'`"
-while [ "$hour" -lt 19 ]; do
+while [ "$hour" -lt 12 ]; do
+hour="`date +'%H'`"
     if [ $red = 1 ]; then
         gpio write $led_red 255
         sleep 1
