@@ -9,10 +9,10 @@ red=0
 green=0
 blue=0
 orange=0
-day=`curl -s "$url" | hxnormalize -x | hxselect 'div.column.carouselMobile'|awk '/\<p\ class=\"/ {print $2}'|cut -d '>' -f2`
+day=`curl -s "$url" | /usr/bin/hxnormalize -x | /usr/bin/hxselect 'div.column.carouselMobile'|/usr/bin/awk '/\<p\ class=\"/ {print $2}'|cut -d '>' -f2`
 #day=`echo $day|cut -d ' ' -f1|cut -d '<' -f1`
 echo $day
-waste=`curl -s "$url" | hxnormalize -x | hxselect 'div.column.carouselMobile'|awk '/\<p\ class=\"/ {print $2}'|cut -d '"' -f2`
+waste=`curl -s "$url" | /usr/bin/hxnormalize -x | /usr/bin/hxselect 'div.column.carouselMobile'|awk '/\<p\ class=\"/ {print $2}'|cut -d '"' -f2`
 echo $waste
 counter=1
 for j in $day; do
@@ -47,32 +47,32 @@ hour="`date +'%H'`"
 while [ "$hour" -lt 12 ]; do
 hour="`date +'%H'`"
     if [ $red = 1 ]; then
-        gpio write $led_red 255
+        /usr/local/bin/gpio write $led_red 255
         sleep 1
-        gpio write $led_red 0
+        /usr/local/bin/gpio write $led_red 0
     fi
     if [ $green = 1 ]; then
-        gpio write $led_green 255
+        /usr/local/bin/gpio write $led_green 255
         sleep 1
-        gpio write $led_green 0
+        /usr/local/bin/gpio write $led_green 0
     fi
     if [ $blue = 1 ]; then
-        gpio write $led_blue 255
+        /usr/local/bin/gpio write $led_blue 255
         sleep 1
-        gpio write $led_blue 0
+        /usr/local/bin/gpio write $led_blue 0
     fi
     if [ $orange = 1 ]; then
-        gpio write $led_red 255
-        gpio write $led_green 140
+        /usr/local/bin/gpio write $led_red 255
+        /usr/local/bin/gpio write $led_green 140
         sleep 1
-        gpio write $led_red 0
-        gpio write $led_green 0
+        /usr/local/bin/gpio write $led_red 0
+        /usr/local/bin/gpio write $led_green 0
     fi
 
 done
-gpio write $led_red 0
-gpio write $led_green 0
-gpio write $led_blue 0
+/usr/local/bin/gpio write $led_red 0
+/usr/local/bin/gpio write $led_green 0
+/usr/local/bin/gpio write $led_blue 0
 exit 0
 
 
